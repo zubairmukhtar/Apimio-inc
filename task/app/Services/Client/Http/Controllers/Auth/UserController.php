@@ -28,17 +28,17 @@ class UserController extends Controller
     {
         return $this->serve(EditUserFeature::class);
     }
-    public function edit($id): JsonResponse
+    public function edit(int $id): JsonResponse
+    {
+        return $this->serve(EditUserFeature::class, compact('id'));
+    }
+
+    public function update(int $id): JsonResponse
     {
         return $this->serve(UpdateUserFeature::class, compact('id'));
     }
 
-    public function update($id): JsonResponse
-    {
-        return $this->serve(GetUserByAuthFeature::class, compact('id'));
-    }
-
-    public function destroy(): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         return $this->serve(DeleteUserFeature::class, compact('id'));
     }

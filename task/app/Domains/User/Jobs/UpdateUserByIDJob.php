@@ -2,18 +2,21 @@
 
 namespace App\Domains\User\Jobs;
 
+use App\Models\User;
 use Lucid\Units\Job;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UpdateUserByIDJob extends Job
 {
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected  int|null $id;
+    protected $password;
+
+
+    public function __construct( int|null $id, $password)
     {
-        //
+        $this->id = $id;
+        $this->password = $password;
     }
 
     /**
@@ -21,8 +24,12 @@ class UpdateUserByIDJob extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(): JsonResponse
     {
-        //
+        $user = User::findOrFail($this->id);
+        $user->password = Hash::make($this->password);
+        $user->save();
+
+        return response()->json($user);
     }
 }

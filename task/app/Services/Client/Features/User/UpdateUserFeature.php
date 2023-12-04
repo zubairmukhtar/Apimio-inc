@@ -2,13 +2,24 @@
 
 namespace App\Services\Client\Features\User;
 
-use Illuminate\Http\Request;
 use Lucid\Units\Feature;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Domains\User\Jobs\UpdateUserByIDJob;
 
 class UpdateUserFeature extends Feature
 {
-    public function handle(Request $request)
+    protected int|null $id;
+    protected $password;
+
+    public function __construct(Request $request)
     {
-        return $this->run();
+        $this->id = $request->id;
+        $this->password = $request->password;
+    }
+
+    public function handle(Request $request): JsonResponse
+    {
+        return $this->run(new UpdateUserByIDJob($this->id, $this->password));
     }
 }

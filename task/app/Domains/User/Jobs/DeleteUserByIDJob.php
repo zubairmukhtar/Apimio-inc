@@ -2,18 +2,22 @@
 
 namespace App\Domains\User\Jobs;
 
+use App\Models\User;
 use Lucid\Units\Job;
+use Illuminate\Http\JsonResponse;
 
 class DeleteUserByIDJob extends Job
 {
+    protected int $id;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(int $id)
     {
-        //
+        $this->id = $id;
     }
 
     /**
@@ -21,8 +25,11 @@ class DeleteUserByIDJob extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(): JsonResponse
     {
-        //
+        $user = User::findOrFail($this->id);
+        $user->delete();
+
+        return response()->json("User Successfully Deleted");
     }
 }
